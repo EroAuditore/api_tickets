@@ -17,11 +17,11 @@ RSpec.describe "/agentes", type: :request do
   # Agente. As you add validations to Agente, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {nombre: "agente test"}
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {nombre: ""}
   }
 
   # This should return the minimal set of values that should be in the headers
@@ -32,18 +32,23 @@ RSpec.describe "/agentes", type: :request do
     {}
   }
 
+  let!(:agentes_list) do
+    FactoryBot.create_list(:agente, 10)
+  end
+
   describe "GET /index" do
-    it "renders a successful response" do
-      Agente.create! valid_attributes
-      get agentes_url, headers: valid_headers, as: :json
+    it "renders a successful response" do      
+      get agentes_url     
+      expect(json).not_to be_empty
+      expect(json.size).to eq(10)
       expect(response).to be_successful
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
-      agente = Agente.create! valid_attributes
-      get agente_url(agente), as: :json
+      agente = agentes_list.first
+      get agentes_url(agente)      
       expect(response).to be_successful
     end
   end
@@ -51,15 +56,16 @@ RSpec.describe "/agentes", type: :request do
   describe "POST /create" do
     context "with valid parameters" do
       it "creates a new Agente" do
+       
         expect {
           post agentes_url,
-               params: { agente: valid_attributes }, headers: valid_headers, as: :json
+               params: { agente: valid_attributes }, as: :json
         }.to change(Agente, :count).by(1)
       end
 
       it "renders a JSON response with the new agente" do
         post agentes_url,
-             params: { agente: valid_attributes }, headers: valid_headers, as: :json
+             params: { agente: valid_attributes }, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -75,7 +81,7 @@ RSpec.describe "/agentes", type: :request do
 
       it "renders a JSON response with errors for the new agente" do
         post agentes_url,
-             params: { agente: invalid_attributes }, headers: valid_headers, as: :json
+             params: { agente: invalid_attributes },  as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -85,31 +91,37 @@ RSpec.describe "/agentes", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+       {nombre: "Nuevo nombre"}
       }
+      let!(:agente) { FactoryBot.create(:agente)}
 
       it "updates the requested agente" do
-        agente = Agente.create! valid_attributes
+        # agente = Agente.create! valid_attributes
+       
         patch agente_url(agente),
-              params: { agente: new_attributes }, headers: valid_headers, as: :json
+              params: { agente: new_attributes }, as: :json
+        
         agente.reload
-        skip("Add assertions for updated state")
+        
+        expect(agente.nombre).to eq new_attributes[:nombre]
+        # skip("Add assertions for updated state")
       end
 
       it "renders a JSON response with the agente" do
-        agente = Agente.create! valid_attributes
+        # agente = Agente.create! valid_attributes
         patch agente_url(agente),
-              params: { agente: new_attributes }, headers: valid_headers, as: :json
+              params: { agente: new_attributes },  as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end
 
     context "with invalid parameters" do
+      let!(:agente) { FactoryBot.create(:agente)}
       it "renders a JSON response with errors for the agente" do
-        agente = Agente.create! valid_attributes
+        # agente = Agente.create! valid_attributes
         patch agente_url(agente),
-              params: { agente: invalid_attributes }, headers: valid_headers, as: :json
+              params: { agente: invalid_attributes },  as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -117,10 +129,12 @@ RSpec.describe "/agentes", type: :request do
   end
 
   describe "DELETE /destroy" do
+    let!(:agente) { FactoryBot.create(:agente)}
     it "destroys the requested agente" do
-      agente = Agente.create! valid_attributes
+     
+      # agente = Agente.create! valid_attributes
       expect {
-        delete agente_url(agente), headers: valid_headers, as: :json
+        delete agente_url(agente),  as: :json
       }.to change(Agente, :count).by(-1)
     end
   end

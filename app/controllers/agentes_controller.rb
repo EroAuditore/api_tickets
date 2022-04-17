@@ -15,8 +15,9 @@ class AgentesController < ApplicationController
 
   # POST /agentes
   def create
+    
     @agente = Agente.new(agente_params)
-
+    
     if @agente.save
       render json: @agente, status: :created, location: @agente
     else
@@ -46,6 +47,6 @@ class AgentesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def agente_params
-      params.fetch(:agente, {})
+      params.fetch(:agente, {}).permit(:nombre)
     end
 end
