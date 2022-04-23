@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :cliente do
-    nombre { "MyString" }
-    rfc { "MyString" }
-    direccion { "MyString" }
-    email { "MyString" }
-    agente { nil }
+    nombre { "Nombre cliente" }
+    rfc { "RFC cliente" }
+    direccion { "direccion cliente" }
+    email { "email@mail.com" }
+    agente 
   end
 end
