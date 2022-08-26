@@ -1,0 +1,2 @@
+class Retorno < ApplicationRecord
+end
