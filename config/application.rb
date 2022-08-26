@@ -35,5 +35,13 @@ module ApiTickets
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    #to prevent generate view from rails
+    # config.generators do |g|
+    #   g.stylesheets false
+    #   g.javascripts false
+    #   g.helper false
+    #   g.views false
+    # end
   end
 end
