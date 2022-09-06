@@ -32,18 +32,25 @@ RSpec.describe "/movimientos", type: :request do
     {}
   }
 
+  let!(:movimiento_list) do
+    FactoryBot.create_list(:movimiento, 10)
+  end
+
   describe "GET /index" do
-    it "renders a successful response" do
-      Movimiento.create! valid_attributes
-      get movimientos_url, headers: valid_headers, as: :json
+    it "renders a list of movimientos" do      
+      get movimientos_url, as: :json
+      byebug
+      expect(json).not_to be_empty
+      expect(json.size).to eq(10)
       expect(response).to be_successful
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      movimiento = Movimiento.create! valid_attributes
+    it "renders a successful response of movimiento con data" do
+      movimiento = FactoryBot.create(:movimiento, :with_data)
       get movimiento_url(movimiento), as: :json
+      byebug
       expect(response).to be_successful
     end
   end

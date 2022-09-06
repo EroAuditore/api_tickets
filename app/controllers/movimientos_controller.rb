@@ -10,6 +10,7 @@ class MovimientosController < ApplicationController
 
   # GET /movimientos/1
   def show
+    byebug
     render json: @movimiento
   end
 
@@ -41,7 +42,7 @@ class MovimientosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_movimiento
-      @movimiento = Movimiento.find(params[:id])
+      @movimiento = Movimiento.joins(:agente, :cliente).includes(:comisiones, :depositos, :retornos).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
