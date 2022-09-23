@@ -17,7 +17,11 @@ RSpec.describe "/movimientos", type: :request do
   # Movimiento. As you add validations to Movimiento, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      estatus:   "abierto",     
+      agente_id: FactoryBot.create(:agente).id, 
+      cliente_id: FactoryBot.create(:cliente).id 
+    }
   }
 
   let(:invalid_attributes) {
@@ -50,6 +54,11 @@ RSpec.describe "/movimientos", type: :request do
     it "renders a successful response of movimiento con data" do
       movimiento = FactoryBot.create(:movimiento, :with_data)
       get movimiento_url(movimiento), as: :json
+      expect(response).to be_successful
+    end
+    it "renders a successful response of movimiento sin data" do
+      movimiento = FactoryBot.create(:movimiento)
+      get movimiento_url(movimiento), as: :json
       byebug
       expect(response).to be_successful
     end
@@ -57,10 +66,10 @@ RSpec.describe "/movimientos", type: :request do
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Movimiento" do
+      it "creates a new empty Movimiento" do
         expect {
           post movimientos_url,
-               params: { movimiento: valid_attributes }, headers: valid_headers, as: :json
+               params: { movimiento: valid_attributes }
         }.to change(Movimiento, :count).by(1)
       end
 

@@ -40,6 +40,7 @@ gem "bootsnap", require: false
 gem 'devise'
 gem 'devise-jwt'
 gem "figaro"
+gem 'fast_jsonapi'
 
 #dry system
 

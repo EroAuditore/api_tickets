@@ -10,14 +10,20 @@ class MovimientosController < ApplicationController
 
   # GET /movimientos/1
   def show
-    byebug
-    render json: @movimiento
+    render json: { 
+      agente: @movimiento.agente, 
+      cliente: @movimiento.cliente, 
+      depositos: @movimiento.depositos, 
+      comisiones: @movimiento.comisiones, 
+      retornos: @movimiento.retornos, 
+      movimiento: @movimiento 
+    }
   end
 
   # POST /movimientos
   def create
     @movimiento = Movimiento.new(movimiento_params)
-
+    byebug
     if @movimiento.save
       render json: @movimiento, status: :created, location: @movimiento
     else
@@ -47,6 +53,22 @@ class MovimientosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def movimiento_params
-      params.fetch(:movimiento, {})
+     
+      params.require([:movimiento, :depositos]).permit(
+        :cantidad_total,
+        :depositos_total, 
+        :retornos_total, 
+        :comision_total,
+        :comision_agente,
+        :comision_oficina,
+        :estatus,
+        :estatus_deposito,
+        :estatus_retorno,
+        :estatus_comision,
+        :agente_id,
+        :cliente_id
+      )
     end
+
+     
 end
